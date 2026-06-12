@@ -1,0 +1,127 @@
+{
+  "project": "Commonsense-Driven Fine-Tuning of Transformer Models for Coherent Story Generation",
+  "dataset": "ROCStories",
+  "fine_tuning_method": "LoRA (r=8, alpha=32, dropout=0.1, bias=none, target_modules=[q_proj, v_proj])",
+  "common_hyperparameters": {
+    "batch_size": 32,
+    "epochs": 10,
+    "learning_rate": "2e-4"
+  },
+  "models": {
+    "DistilGPT-2": {
+      "size": "85M",
+      "trainable_params": 147456,
+      "trainable_params_pct": 0.179,
+      "target_layers": ["q_proj", "v_proj"],
+      "training_loss": {
+        "start": 3.5,
+        "end": 3.07
+      },
+      "decoding_strategies": {
+        "greedy": {
+          "BLEU": 1.8086,
+          "ROUGE-F1": 0.1793,
+          "ROUGE-Recall": 0.1736,
+          "BERTScore-F1": 0.8865,
+          "Semantic_Coherence": 0.7132,
+          "Perplexity": 121.01
+        },
+        "temperature_sampling": {
+          "BLEU": 0.6030,
+          "ROUGE-F1": 0.1344,
+          "ROUGE-Recall": 0.1389,
+          "BERTScore-F1": 0.8769,
+          "Semantic_Coherence": 0.6864,
+          "Perplexity": 211.51
+        },
+        "top_p_sampling": {
+          "BLEU": 0.7556,
+          "ROUGE-F1": 0.1422,
+          "ROUGE-Recall": 0.1451,
+          "BERTScore-F1": 0.8789,
+          "Semantic_Coherence": 0.6920,
+          "Perplexity": 184.54
+        }
+      },
+      "best_decoding_strategy": "greedy"
+    },
+    "GPT-Neo-125M": {
+      "size": "125M",
+      "trainable_params": 294912,
+      "trainable_params_pct": 0.235,
+      "target_layers": ["q_proj", "v_proj"],
+      "perplexity_held_out": 15.85,
+      "decoding_strategies": {
+        "greedy": {
+          "BLEU": 1.8065,
+          "ROUGE-F1": 0.1712,
+          "ROUGE-Recall": 0.1646,
+          "BERTScore-F1": 0.8872,
+          "Semantic_Coherence": 0.7052
+        },
+        "temperature_sampling": {
+          "BLEU": 0.6472,
+          "ROUGE-F1": 0.1287,
+          "ROUGE-Recall": 0.1313,
+          "BERTScore-F1": 0.8769,
+          "Semantic_Coherence": 0.6773
+        },
+        "top_p_sampling": {
+          "BLEU": 0.7626,
+          "ROUGE-F1": 0.1390,
+          "ROUGE-Recall": 0.1403,
+          "BERTScore-F1": 0.8794,
+          "Semantic_Coherence": 0.6835
+        }
+      },
+      "best_decoding_strategy": "greedy"
+    },
+    "GPT-2-Small": {
+      "size": "117M",
+      "trainable_params": 811008,
+      "trainable_params_pct": 0.6475,
+      "target_layers": ["q_proj", "v_proj"],
+      "training_loss": {
+        "start": 3.3142,
+        "end": 3.0459
+      },
+      "validation_loss": {
+        "start": 3.1271,
+        "end": 3.0091
+      },
+      "decoding_strategies": {
+        "greedy": {
+          "BLEU": 0.6499,
+          "ROUGE-1": 0.1634,
+          "ROUGE-2": 0.0257,
+          "ROUGE-L": 0.1554,
+          "BERTScore-F1": 0.3485,
+          "Semantic_Coherence": 0.4557
+        },
+        "temperature_sampling": {
+          "BLEU": 0.2795,
+          "ROUGE-1": 0.1217,
+          "ROUGE-2": 0.0094,
+          "ROUGE-L": 0.1149,
+          "BERTScore-F1": 0.2961,
+          "Semantic_Coherence": 0.4091
+        },
+        "top_p_sampling": {
+          "BLEU": 0.3868,
+          "ROUGE-1": 0.1223,
+          "ROUGE-2": 0.0106,
+          "ROUGE-L": 0.1183,
+          "BERTScore-F1": 0.3001,
+          "Semantic_Coherence": 0.4075
+        }
+      },
+      "best_decoding_strategy": "greedy"
+    }
+  },
+  "overall_findings": {
+    "best_overall_model": "GPT-2-Small",
+    "best_decoding_strategy_across_models": "greedy",
+    "lora_trainable_param_range_pct": [0.17, 0.64],
+    "key_observation": "Greedy decoding consistently achieved the highest accuracy, coherence, and semantic fidelity across all three models, while temperature and top-p sampling traded accuracy for diversity. BERTScore-F1 (~0.88 for DistilGPT-2 and GPT-Neo) indicates strong semantic alignment even when lexical overlap (BLEU/ROUGE) is low."
+  }
+}
